@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101418">
+<title>TED精读计划 2 · 学习打卡</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{text-size-adjust:100%}
+body{margin:0;background:#0e1116;color:#e8ecf1;font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;padding-bottom:64px}
+a{color:#7cc4ff}
+.hdr{padding:14px 16px 10px;background:#131922;border-bottom:1px solid #1e2733;position:sticky;top:0;z-index:5}
+.hdr .t{font-size:12px;color:#8b9bb0;letter-spacing:.4px}
+.hdr .d{font-size:19px;font-weight:700;margin-top:2px}
+.hdr .w{font-size:12px;color:#7cc4ff;margin-top:3px}
+main{padding:14px 14px 20px}
+.card{background:#161d27;border:1px solid #212b38;border-radius:14px;padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.card h3 span{font-size:12px;color:#8b9bb0;font-weight:400}
+.muted{color:#8b9bb0;font-size:12.5px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:600;background:#243040;color:#dbe6f3}
+.btn.p{background:#2f7cf6;color:#fff}
+.btn.g{background:#1f8f5f;color:#fff}
+.btn.r{background:#8f2f36;color:#fff}
+.btn:disabled{opacity:.42}
+.big{font-size:30px;font-weight:800;letter-spacing:-.5px}
+.step{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed #212b38}
+.step:last-child{border-bottom:0}
+.step input{margin-top:3px;width:18px;height:18px}
+.step b{font-weight:600}
+.step .s{font-size:12.5px;color:#8b9bb0}
+.talk{display:flex;gap:10px;align-items:center;padding:10px;border-radius:11px;background:#141a23;margin-bottom:8px;border:1px solid #1d2631}
+.talk .no{width:44px;font-weight:700;color:#7cc4ff;font-size:13px}
+.talk .ti{flex:1;min-width:0}
+.talk .ti .nm{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.talk .ti .tg{font-size:11.5px;color:#8b9bb0}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:#1f2b3a;color:#9fc3ef;margin-left:4px}
+.tag.deep{background:#2b2036;color:#c9a6ee}
+.tag.shadow{background:#1c3030;color:#8fd8c9}
+.tag.scan{background:#2a2a20;color:#d8cd8f}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.grid i{aspect-ratio:1;border-radius:5px;background:#1a222d;font-style:normal;font-size:9px;color:#5d6b7d;display:flex;align-items:center;justify-content:center}
+.grid i.on{background:#1f8f5f;color:#fff}
+.grid i.today{outline:2px solid #7cc4ff}
+.tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;background:#131922;border-top:1px solid #1e2733;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.tabbar button{flex:1;border:0;background:transparent;color:#7d8ea3;font-size:11px;padding:6px 0;font-weight:600}
+.tabbar button.on{color:#7cc4ff}
+.tabbar button i{display:block;font-size:16px;font-style:normal;margin-bottom:2px}
+input[type=text],textarea,input[type=number],input[type=date]{width:100%;background:#0d131b;border:1px solid #263242;color:#e8ecf1;border-radius:9px;padding:9px 10px;font-size:14px;font-family:inherit}
+textarea{min-height:70px;resize:vertical}
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed #212b38;font-size:13.5px}
+.kv:last-child{border-bottom:0}
+.kv b{font-weight:600}
+.pill{font-size:11px;padding:2px 8px;border-radius:99px;background:#1a222d;color:#8b9bb0}
+.pill.ok{background:#1f8f5f;color:#fff}
+.banner{background:#1b2c1f;border:1px solid #2b6b45;color:#a8e6c1;padding:10px 12px;border-radius:11px;font-size:13px;margin-bottom:12px}
+.warn{background:#2c2418;border:1px solid #6b5a2b;color:#e6d3a8}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="t" id="hdrT"></div><div class="d" id="hdrD"></div><div class="w" id="hdrW"></div></div>
+<main id="main"></main>
+<nav class="tabbar" id="tabbar"></nav>
+<script>
+"use strict";
+var BOOK = { id: "b2", name: "TED精读计划 2", total: 18 };
+var DEFTALKS = [{"t": "Are you a giver or a taker?", "s": "Adam Grant", "cn": "你是给予者还是索取者", "tag": "管理", "lvl": "中"}, {"t": "How to turn a group of strangers into a team", "s": "Amy Edmondson", "cn": "如何把陌生人变成团队", "tag": "管理", "lvl": "中"}, {"t": "Why good leaders make you feel safe", "s": "Simon Sinek", "cn": "好领导为什么让你有安全感", "tag": "管理", "lvl": "中"}, {"t": "The psychology of your future self", "s": "Dan Gilbert", "cn": "未来自我的心理学", "tag": "心理", "lvl": "中"}, {"t": "What makes a good life?", "s": "Robert Waldinger", "cn": "什么造就美好人生（哈佛成人研究）", "tag": "心理", "lvl": "中"}, {"t": "Why we all need to practice emotional first aid", "s": "Guy Winch", "cn": "情绪急救", "tag": "心理", "lvl": "中"}, {"t": "Everything you think you know about addiction is wrong", "s": "Johann Hari", "cn": "关于成瘾你知道的都错了", "tag": "社会", "lvl": "中"}, {"t": "Machine intelligence makes human morals more important", "s": "Zeynep Tufekci", "cn": "机器智能让人性道德更重要", "tag": "科技", "lvl": "中"}, {"t": "3 principles for creating safer AI", "s": "Stuart Russell", "cn": "更安全AI的三条原则", "tag": "科技", "lvl": "难"}, {"t": "How to get empowered, not overpowered, by AI", "s": "Max Tegmark", "cn": "如何让AI赋能而非压制", "tag": "科技", "lvl": "难"}, {"t": "How I'm fighting bias in algorithms", "s": "Joy Buolamwini", "cn": "算法偏见之战", "tag": "科技", "lvl": "难"}, {"t": "The era of blind faith in big data must end", "s": "Cathy O'Neil", "cn": "大数据盲信时代该结束了", "tag": "科技", "lvl": "难"}, {"t": "Why specializing early doesn't predict success", "s": "David Epstein", "cn": "早专精并不预示成功", "tag": "教育", "lvl": "中"}, {"t": "The gift and power of emotional courage", "s": "Susan David", "cn": "情绪勇气的力量", "tag": "心理", "lvl": "中"}, {"t": "Listening to shame", "s": "Brené Brown", "cn": "倾听羞耻", "tag": "心理", "lvl": "难"}, {"t": "The optimism bias", "s": "Tali Sharot", "cn": "乐观偏见", "tag": "心理", "lvl": "中"}, {"t": "There's more to life than being happy", "s": "Emily Esfahani Smith", "cn": "人生不止于幸福", "tag": "心理", "lvl": "中"}, {"t": "The next outbreak? We're not ready", "s": "Bill Gates", "cn": "下一次疫情我们没准备好", "tag": "社会", "lvl": "难"}];
+var LSK = "tedplan_" + BOOK.id;
+var DW = [1,2,3,4,5,6,8,9,10,11];   // 精读周
+var SW = [3,4,5,6,8,9,10,11];        // 跟读周
+var SCW = [2,3,4,5,6,8,9,10,11];     // 泛读周
+
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function todayISO(d){ d = d || new Date(); var m = d.getMonth()+1, dd = d.getDate();
+  return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd; }
+function parseISO(s){ var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function addDays(d,n){ var x = new Date(d.getTime()); x.setDate(x.getDate()+n); return x; }
+function diffDays(a,b){ return Math.round((parseISO(b)-parseISO(a))/86400000); }
+function dowCN(i){ return ["周日","周一","周二","周三","周四","周五","周六"][i]; }
+
+var DEF = function(){ return {
+  v: 1,
+  start: todayISO(),
+  talks: {},      // "3": {title:"", }
+  steps: {},      // "3": [0,0,0,0,0]
+  cards: [],      // {date, talk, quote, struct, words}
+  logs: {},       // "2026-11-06": {sec:0, rec:0, self:0, done:false}
+  cfg: { dailyMin: 15, deepMin: 55, recDaily: 30, recDeep: 60 }
+}; };
+
+var S = load();
+function load(){
+  try { var r = JSON.parse(localStorage.getItem(LSK)); if (r && r.v) { var d = DEF(); for (var k in d) if (!(k in r)) r[k] = d[k];
+    for (var c in d.cfg) if (!(c in r.cfg)) r.cfg[c] = d.cfg[c]; return r; } } catch(e){}
+  return DEF();
+}
+function save(){ try { localStorage.setItem(LSK, JSON.stringify(S)); } catch(e){} }
+
+/* ---------- 计划模型 ---------- */
+function mkPlan(){
+  var deep=[], shadow=[], scan=[], n=1;
+  DW.forEach(function(w){ if (n<=BOOK.total) deep.push({w:w, talk:n++}); });
+  SW.forEach(function(w){ if (n<=BOOK.total) shadow.push({w:w, talk:n++}); });
+  SCW.forEach(function(w){ if (n<=BOOK.total) scan.push({w:w, talk:n++}); });
+  return {deep:deep, shadow:shadow, scan:scan};
+}
+var PLAN = mkPlan();
+function roleOf(talk){
+  for (var i=0;i<PLAN.deep.length;i++) if (PLAN.deep[i].talk===talk) return "deep";
+  for (var j=0;j<PLAN.shadow.length;j++) if (PLAN.shadow[j].talk===talk) return "shadow";
+  return "scan";
+}
+function weekOf(talk){
+  var a = PLAN.deep.concat(PLAN.shadow, PLAN.scan);
+  for (var i=0;i<a.length;i++) if (a[i].talk===talk) return a[i].w;
+  return 0;
+}
+function curWeek(){
+  var d = diffDays(S.start, todayISO());
+  if (d < 0) return 0;
+  return Math.min(12, Math.floor(d/7)+1);
+}
+function roleCN(r){ return r==="deep" ? "精读" : r==="shadow" ? "跟读" : "泛读"; }
+function defTalk(t){ return DEFTALKS[t-1] || {t:"", s:"", cn:"", tag:"", lvl:""}; }
+function talkTitle(t){ var o = S.talks[t]; if (o && o.title) return o.title; var d = defTalk(t); return d.t ? d.t : "第 "+t+" 篇（点此填标题）"; }
+function tedLink(t){ var d = defTalk(t); return "https://www.ted.com/search?q=" + encodeURIComponent(d.t || talkTitle(t)); }
+function stepsOf(t){ if (!S.steps[t]) S.steps[t] = [0,0,0,0,0]; return S.steps[t]; }
+function stepsDone(t){ var a = stepsOf(t), n = 0; for (var i=0;i<5;i++) if (a[i]) n++; return n; }
+function cardOf(talk){ for (var i=S.cards.length-1;i>=0;i--) if (S.cards[i].talk===talk) return S.cards[i]; return null; }
+function logOf(d){ if (!S.logs[d]) S.logs[d] = {sec:0, rec:0, self:0, done:false}; return S.logs[d]; }
+function isDeepDay(d){ return parseISO(d).getDay() === 6; }
+function needSec(d){ return isDeepDay(d) ? S.cfg.deepMin*60 : S.cfg.dailyMin*60; }
+function needRec(d){ return isDeepDay(d) ? S.cfg.recDeep : S.cfg.recDaily; }
+function streak(){
+  var n = 0, d = todayISO();
+  if (!(S.logs[d] && S.logs[d].done)) d = todayISO(addDays(parseISO(d), -1));
+  while (S.logs[d] && S.logs[d].done) { n++; d = todayISO(addDays(parseISO(d), -1)); }
+  return n;
+}
+function weekDeep(w){ for (var i=0;i<PLAN.deep.length;i++) if (PLAN.deep[i].w===w) return PLAN.deep[i].talk; return 0; }
+function weekTasks(w){
+  var out = [];
+  PLAN.deep.concat(PLAN.shadow, PLAN.scan).forEach(function(x){ if (x.w===w) out.push({talk:x.talk, role:roleOf(x.talk)}); });
+  out.sort(function(a,b){ var r={deep:0,shadow:1,scan:2}; return r[a.role]-r[b.role] || a.talk-b.talk; });
+  return out;
+}
+
+/* ---------- 计时器（前台才算） ---------- */
+var timer = {on:false, tick:null};
+function timerStart(){
+  if (timer.on) return;
+  timer.on = true; render();
+  timer.tick = setInterval(function(){
+    if (document.visibilityState !== "visible") return;
+    var L = logOf(todayISO()); L.sec++; save();
+    var el = document.getElementById("secNow"); if (el) el.textContent = fmt(L.sec);
+    var st = document.getElementById("barState"); if (st) st.textContent = "计时中";
+  }, 1000);
+}
+function timerStop(){ timer.on = false; clearInterval(timer.tick); timer.tick = null; render(); }
+function fmt(s){ var m = Math.floor(s/60), x = s%60; return m+"′"+(x<10?"0":"")+x+"″"; }
+
+/* ---------- 录音（只存时长） ---------- */
+var rec = {mr:null, chunks:[], t0:0, iv:null};
+function recStart(){
+  if (!navigator.mediaDevices || !window.MediaRecorder) { recFail("此浏览器不支持录音"); return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    rec.chunks = []; rec.mr = new MediaRecorder(stream);
+    rec.t0 = Date.now();
+    rec.mr.ondataavailable = function(e){ rec.chunks.push(e.data); };
+    rec.mr.onstop = function(){
+      var sec = Math.round((Date.now()-rec.t0)/1000);
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      var L = logOf(todayISO());
+      if (sec > (L.rec||0)) L.rec = sec;
+      save(); render();
+    };
+    rec.mr.start();
+    rec.iv = setInterval(function(){
+      var el = document.getElementById("recNow");
+      if (el) el.textContent = fmt(Math.round((Date.now()-rec.t0)/1000));
+    }, 500);
+    render();
+  }).catch(function(){ recFail("麦克风不可用"); });
+}
+function recStop(){
+  if (rec.iv) { clearInterval(rec.iv); rec.iv = null; }
+  if (rec.mr && rec.mr.state !== "inactive") rec.mr.stop();
+}
+function recFail(msg){
+  var L = logOf(todayISO()); L.rec = Math.max(L.rec||0, 1); save(); render();
+  alert(msg + "。已开启「自证」通道：请朗读/复述 2 遍后点「自证完成」。");
+}
+function selfOk(){ var L = logOf(todayISO()); L.self = 1; save(); render(); }
+
+/* ---------- 打卡 ---------- */
+function checkinBlock(){
+  var d = todayISO(), L = logOf(d), need = needSec(d);
+  if (L.sec < need) return "还需前台计时 "+fmt(need-L.sec);
+  if ((L.rec||0) < needRec(d) && !L.self) return "还需录音 ≥"+needRec(d)+"″";
+  var w = curWeek();   if (isDeepDay(d) && w>=1 && w<=12) { if (!cardOf(weekDeep(w))) return "还需填一张卡（金句+结构+3 词）"; }
+  return "";
+}
+function doCheckin(){
+  var r = checkinBlock(); if (r) { alert(r); return; }
+  var d = todayISO(); logOf(d).done = true; save(); render();
+  alert("打卡成功 ✅ 连续 "+streak()+" 天。此记录不可撤销。");
+}
+
+/* ---------- 视图 ---------- */
+var route = { tab: "today", sub: null };
+var TABS = [["today","今天","◉"],["plan","计划","▦"],["talks","篇目","☰"],["prog","进度","◈"],["set","设置","⚙"]];
+
+function go(h){ location.hash = h; }
+function parseHash(){
+  var h = (location.hash || "#today").replace("#","");
+  var p = h.split("/");
+  var okTab = TABS.some(function(t){ return t[0]===p[0]; }) || p[0]==="talk" || p[0]==="card";   route.tab = okTab ? p[0] : "today";
+  route.sub = p[1] ? p.slice(1).join("/") : null;
+}
+
+function vToday(){
+  var d = todayISO(), L = logOf(d), w = curWeek(), deep = isDeepDay(d);
+  var wt = w>=1 ? weekDeep(w) : 0;
+  var h = "";
+  if (w < 1) h += '<div class="banner warn">计划还没开始（起始日 '+S.start+'）。设置页可改起始日。</div>';
+  if (w > 12) h += '<div class="banner">12 周计划已跑完。回炉：把 10 篇的绿句拼成 3 分钟 mini TED。</div>';
+  if (L.done) h += '<div class="banner">今天已打卡 ✅ 连续 '+streak()+' 天。记录不可撤销。</div>';
+
+  h += '<div class="card"><h3>今日任务 <span>'+(deep?"精读日":"保温日")+'</span></h3>';
+  h += '<div class="muted" style="margin-bottom:10px">目标：前台计时 ≥'+fmt(needSec(d))+' ＋ 录音 ≥'+needRec(d)+'″'+(deep?' ＋ 填 1 张卡':'')+'</div>';
+  h += '<div class="row" style="margin-bottom:10px"><span class="pill">计时 <b id="secNow">'+fmt(L.sec)+'</b></span><span class="pill">录音 <b id="recNow">'+fmt(L.rec||0)+'″</b></span><span class="pill" id="barState">'+(timer.on?"计时中":"未计时")+'</span></div>';
+  h += '<div class="row"><button class="btn '+(timer.on?"r":"p")+'" onclick="'+(timer.on?"timerStop()":"timerStart()")+'">'+(timer.on?"暂停计时":"开始计时（前台才算）")+'</button>';
+  h += '<button class="btn" onclick="recStart()">录音（复述）</button><button class="btn" onclick="recStop()">停止录音</button></div>';
+  if (L.self) h += '<div class="muted" style="margin-top:8px">已用自证通道（录音不可用）。</div>';
+  else h += '<div class="muted" style="margin-top:8px">麦克风不可用？<a href="javascript:selfOk()">走自证（读/复述 2 遍）</a></div>';
+  h += '</div>';
+
+  if (deep && w>=1 && w<=12 && wt) {
+    var t = wt, st = stepsOf(t);
+    h += '<div class="card"><h3>本周精读 · 第 '+t+' 篇 <span>'+talkTitle(t)+'</span></h3>';
+    var STEPS = [
+      ["裸听 2–3 分钟，不看稿，记 3 个关键词 + 1 句他想说服我什么","5′"],
+      ["通读一遍，不做笔记；读完在底栏写 ≤15 词英文总结","15′"],
+      ["拆结构写右栏：开场钩子 / 2–3 个论点的证据类型 / 收尾方式","20′"],
+      ["左栏写成问句（模拟课上有人问你）","10′"],
+      ["影子跟读 60–90 秒 × 3 遍 + 录音 1 遍，卡壳点用橙笔标","15′"]
+    ];
+    for (var i=0;i<5;i++){
+      h += '<label class="step"><input type="checkbox" '+(st[i]?"checked":"")+' onchange="toggleStep('+t+','+i+',this.checked)"><div><b>'+(i+1)+'. '+STEPS[i][0]+'</b><div class="s">'+STEPS[i][1]+'</div></div></label>';
+    }
+    h += '<div style="margin-top:10px"><a class="btn" href="#card/'+t+'">填这张卡</a></div></div>';
+  }
+
+  h += '<div class="card"><h3>打卡</h3>';
+  var blk = checkinBlock();
+  h += '<div class="muted" style="margin-bottom:10px">'+(L.done?"已完成":"未完成")+(blk?" · "+blk:" · 条件已满足")+'</div>';
+  h += '<button class="btn g" onclick="doCheckin()" '+(L.done||blk?"disabled":"")+'>'+(L.done?"今天已打卡":"打卡（不可撤销）")+'</button></div>';
+
+  h += '<div class="card"><h3>每日 15 分钟保温</h3><div class="muted">听昨天那篇的 1 分钟片段 → 复述 30 秒 → 录音。周末的精读与这 15 分钟不能互换。</div></div>';
+  return h;
+}
+
+function vPlan(){
+  var h = '<div class="card"><h3>12 周节奏 <span>起始 '+S.start+'</span></h3><div class="muted">第 1 周只跑样板（跑通方法，不出量）· 第 7 周回炉 · 第 12 周收官写 3 分钟 mini TED</div></div>';
+  for (var w=1; w<=12; w++){
+    var cur = (w === curWeek());
+    var th = weekTasks(w);
+    h += '<div class="card"><h3>第 '+w+' 周 '+(w===1?'· 样板周':w===7?'· 回炉周':w===12?'· 收官周':'')+(cur?' <span class="pill ok">本周</span>':'')+'</h3>';
+    if (w===7) h += '<div class="muted">不出新篇：把前 6 篇的绿句拼成一段 90 秒自述，录音。</div>';
+    else if (w===12) h += '<div class="muted">写一段 3 分钟 mini TED，至少用上 2 个书里的结构骨架。</div>';
+    else if (!th.length) h += '<div class="muted">—</div>';
+    else th.forEach(function(x){
+      var dn = stepsDone(x.talk), c = cardOf(x.talk);
+      h += '<div class="talk" onclick="go(\'talk/'+x.talk+'\')"><div class="no">P'+x.talk+'</div><div class="ti"><div class="nm">'+talkTitle(x.talk)+'</div><div class="tg"><span class="tag '+x.role+'">'+roleCN(x.role)+'</span> '+(x.role==="scan"?"读一遍+一句话总结":dn+"/5 步")+(c?" · 已出卡":"")+'</div></div></div>';
+    });
+    h += '</div>';
+  }
+  return h;
+}
+
+function vTalks(){
+  var h = '<div class="card"><h3>篇目 <span>'+BOOK.total+' 篇</span></h3><div class="muted">点标题填写书上目录的篇名；分类与周次已排好。</div></div>';
+  for (var t=1; t<=BOOK.total; t++){
+    var r = roleOf(t), dn = stepsDone(t), c = cardOf(t);
+    var d = defTalk(t);
+    h += '<div class="talk"><div class="no">P'+t+'</div><div class="ti" onclick="go(\'talk/'+t+'\')"><div class="nm">'+talkTitle(t)+'</div><div class="tg"><span class="tag '+r+'">'+roleCN(r)+'</span> 第 '+weekOf(t)+' 周 · '+dn+'/5 步'+(c?" · 已出卡":"")+'</div>'+(d.s?'<div class="tg">'+esc(d.s)+' · '+esc(d.cn)+' · '+esc(d.tag)+' · 难度'+esc(d.lvl)+'</div>':'')+'</div><button class="btn" style="padding:7px 10px;font-size:12px" onclick="renameTalk('+t+')">改名</button></div>';
+  }
+  return h;
+}
+
+function vTalk(t){
+  var st = stepsOf(t), r = roleOf(t), c = cardOf(t);
+  var h = '<div class="card"><h3>第 '+t+' 篇 <span>'+roleCN(r)+' · 第 '+weekOf(t)+' 周</span></h3>';
+  h += '<input type="text" value="'+esc(talkTitle(t))+'" onchange="setTitle('+t+',this.value)" placeholder="填书上目录的篇名">';
+  var dd = defTalk(t);
+  if (dd.s) h += '<div class="muted" style="margin-top:8px">建议对口演讲：<b>'+esc(dd.t)+'</b> · '+esc(dd.s)+' · '+esc(dd.cn)+' · '+esc(dd.tag)+' · 难度'+esc(dd.lvl)+'<br><a href="#" data-ext="'+tedLink(t)+'">在 TED 官方搜这个演讲 →</a></div>';
+  var STEPS = [
+    ["裸听 2–3 分钟，不看稿，记 3 个关键词 + 1 句他想说服我什么","5′"],
+    ["通读一遍，不做笔记；读完在底栏写 ≤15 词英文总结","15′"],
+    ["拆结构写右栏：开场钩子 / 2–3 个论点的证据类型 / 收尾方式","20′"],
+    ["左栏写成问句（模拟课上有人问你）","10′"],
+    ["影子跟读 60–90 秒 × 3 遍 + 录音 1 遍，卡壳点用橙笔标","15′"]
+  ];
+  for (var i=0;i<5;i++){
+    h += '<label class="step"><input type="checkbox" '+(st[i]?"checked":"")+' onchange="toggleStep('+t+','+i+',this.checked)"><div><b>'+(i+1)+'. '+STEPS[i][0]+'</b><div class="s">'+STEPS[i][1]+'</div></div></label>';
+  }
+  h += '</div>';
+  h += '<div class="card"><h3>卡片</h3>';
+  if (c) {
+    h += '<div class="kv"><span>金句</span><b>'+esc(c.quote||"—")+'</b></div>';
+    h += '<div class="kv"><span>结构</span><b>'+esc(c.struct||"—")+'</b></div>';
+    h += '<div class="kv"><span>主动词</span><b>'+esc(c.words||"—")+'</b></div>';
+    h += '<div class="muted" style="margin-top:8px">'+c.date+' 记录。可再次填写覆盖。</div>';
+  } else h += '<div class="muted">还没有卡。精读日出卡是打卡的硬条件之一。</div>';
+  h += '<div style="margin-top:10px"><a class="btn" href="#card/'+t+'">填/改卡</a></div></div>';
+  h += '<div style="margin-bottom:20px"><a class="btn" href="#talks">返回篇目</a></div>';
+  return h;
+}
+
+function vCard(t){
+  var c = cardOf(t) || {quote:"", struct:"", words:""};
+  var h = '<div class="card"><h3>第 '+t+' 篇 · 出卡 <span>'+esc(talkTitle(t))+'</span></h3>';
+  h += '<div class="muted" style="margin-bottom:6px">金句（可直接在课上引用）</div><textarea id="cq" placeholder="原句">'+esc(c.quote)+'</textarea>';
+  h += '<div class="muted" style="margin:10px 0 6px">结构骨架（可复用，一句话）</div><textarea id="cs" placeholder="如 problem→old fix fails→new frame→call">'+esc(c.struct)+'</textarea>';
+  h += '<div class="muted" style="margin:10px 0 6px">3 个主动词（每个配一句你行业里的例句）</div><textarea id="cw">'+esc(c.words)+'</textarea>';
+  h += '<div class="row" style="margin-top:12px"><button class="btn p" onclick="saveCard('+t+')">保存卡</button><a class="btn" href="#talk/'+t+'">返回</a></div></div>';
+  return h;
+}
+
+function vProg(){
+  var doneTalks = 0, deepDone = 0;
+  for (var t=1;t<=BOOK.total;t++){ if (stepsDone(t)===5) doneTalks++; if (roleOf(t)==="deep" && stepsDone(t)===5) deepDone++; }
+  var days = 0, on = 0;
+  for (var d in S.logs){ days++; if (S.logs[d].done) on++; }
+  var h = '<div class="card"><h3>总览</h3>';
+  h += '<div class="kv"><span>连续打卡</span><b>'+streak()+' 天</b></div>';
+  h += '<div class="kv"><span>已打卡天数</span><b>'+on+' / '+Math.max(1,diffDays(S.start,todayISO())+1)+'</b></div>';
+  h += '<div class="kv"><span>五步走完的篇数</span><b>'+doneTalks+' / '+BOOK.total+'</b></div>';
+  h += '<div class="kv"><span>精读篇（A 级）</span><b>'+deepDone+' / '+PLAN.deep.length+'</b></div>';
+  h += '<div class="kv"><span>卡片数</span><b>'+S.cards.length+'</b></div></div>';
+  h += '<div class="card"><h3>84 天热格</h3><div class="grid">';
+  for (var i=0;i<84;i++){
+    var d2 = todayISO(addDays(parseISO(S.start), i));
+    var cls = "grid i" + (S.logs[d2] && S.logs[d2].done ? " on":"") + (d2===todayISO()?" today":"");
+    h += '<i class="'+cls+'">'+parseISO(d2).getDate()+'</i>';
+  }
+  h += '</div></div>';
+  h += '<div class="card"><h3>卡片库 <span>'+S.cards.length+'</span></h3>';
+  if (!S.cards.length) h += '<div class="muted">还没有卡。</div>';
+  for (var k=S.cards.length-1;k>=0;k--){ var c=S.cards[k];
+    h += '<div class="talk"><div class="no">P'+c.talk+'</div><div class="ti"><div class="nm">'+esc(c.quote||"—")+'</div><div class="tg">'+esc(c.struct||"")+' · '+c.date+'</div></div></div>'; }
+  h += '</div>';
+  return h;
+}
+
+function vSet(){
+  var h = '<div class="card"><h3>门槛设置</h3>';
+  h += '<div class="muted" style="margin-bottom:6px">保温日最少前台计时（分钟）</div><input type="number" id="c1" value="'+S.cfg.dailyMin+'">';
+  h += '<div class="muted" style="margin:10px 0 6px">精读日（周六）最少前台计时（分钟）</div><input type="number" id="c2" value="'+S.cfg.deepMin+'">';
+  h += '<div class="muted" style="margin:10px 0 6px">保温日最少录音（秒）</div><input type="number" id="c3" value="'+S.cfg.recDaily+'">';
+  h += '<div class="muted" style="margin:10px 0 6px">精读日最少录音（秒）</div><input type="number" id="c4" value="'+S.cfg.recDeep+'">';
+  h += '<div class="muted" style="margin:10px 0 6px">计划起始日</div><input type="date" id="c5" value="'+S.start+'">';
+  h += '<div class="row" style="margin-top:12px"><button class="btn p" onclick="saveCfg()">保存</button></div></div>';
+  h += '<div class="card"><h3>批量导入篇名</h3><div class="muted" style="margin-bottom:6px">每行一篇，按 P1…P'+BOOK.total+' 顺序填</div>';
+  h += '<textarea id="imp" placeholder="第1篇标题&#10;第2篇标题"></textarea>';
+  h += '<div class="row" style="margin-top:10px"><button class="btn p" onclick="importTitles()">导入</button></div></div>';
+  h += '<div class="card"><h3>数据</h3>';
+  h += '<div class="row"><button class="btn" onclick="exportJSON()">导出 JSON</button><button class="btn r" onclick="wipe()">清空本册数据</button></div>';
+  h += '<div class="muted" style="margin-top:8px">数据只存本机浏览器。换手机或清缓存前先导出。</div></div>';
+  h += '<div class="card"><h3>方法备忘</h3><div class="muted">三色是书里印的（红生僻 / 蓝重点 / 黄一词多义）。你只加两色：<b>绿=可借用句式</b>、<b>橙=听错读错的音</b>。左栏必须写问句，写陈述句＝白买活页。</div></div>';
+  return h;
+}
+
+/* ---------- 动作 ---------- */
+function toggleStep(t,i,v){ var a = stepsOf(t); a[i] = v?1:0; save(); render(); }
+function setTitle(t,v){ if (!S.talks[t]) S.talks[t] = {}; S.talks[t].title = v; save(); }
+function renameTalk(t){ var v = prompt("第 "+t+" 篇的篇名（照书目录填）", S.talks[t] && S.talks[t].title || ""); if (v!==null) { setTitle(t,v.trim()); render(); } }
+function saveCard(t){
+  var q = document.getElementById("cq").value.trim(), st = document.getElementById("cs").value.trim(), w = document.getElementById("cw").value.trim();
+  if (!q || !st || !w) { alert("三行都要填：金句、结构、3 个主动词。"); return; }
+  for (var i=S.cards.length-1;i>=0;i--) if (S.cards[i].talk===t) S.cards.splice(i,1);
+  S.cards.push({date: todayISO(), talk: t, quote: q, struct: st, words: w});
+  save(); go("talk/"+t); alert("卡已保存 ✅");
+}
+function saveCfg(){
+  S.cfg.dailyMin = +document.getElementById("c1").value || 15;
+  S.cfg.deepMin = +document.getElementById("c2").value || 55;
+  S.cfg.recDaily = +document.getElementById("c3").value || 30;
+  S.cfg.recDeep = +document.getElementById("c4").value || 60;
+  var st = document.getElementById("c5").value; if (st) S.start = st;
+  save(); render(); alert("已保存");
+}
+function importTitles(){
+  var raw = document.getElementById("imp").value.split("\n");
+  var n = 0;
+  for (var i=0;i<raw.length;i++){
+    var s = raw[i].trim(); if (!s) continue;
+    if (n+1 > BOOK.total) break;
+    if (!S.talks[n+1]) S.talks[n+1] = {};
+    S.talks[n+1].title = s; n++;
+  }
+  save(); render(); alert("已导入 "+n+" 条");
+}
+function exportJSON(){
+  var blob = new Blob([JSON.stringify(S,null,2)], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "tedplan_" + BOOK.id + "_" + todayISO() + ".json";
+  a.click();
+}
+function wipe(){
+  if (!confirm("清空本册全部记录（篇名、勾选、卡片、打卡）？不可恢复。")) return;
+  S = DEF(); save(); render();
+}
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+/* ---------- 渲染 ---------- */
+function render(){
+  var d = new Date(), w = curWeek();
+  document.getElementById("hdrT").textContent = BOOK.name + " · 学习打卡";
+  document.getElementById("hdrD").textContent = d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 · "+dowCN(d.getDay());
+  document.getElementById("hdrW").textContent = (w<1?"尚未开始":w>12?"12 周已跑完":"第 "+w+" 周 / 共 12 周") + " · 连续 "+streak()+" 天";
+  var h = "";
+  if (route.tab==="today") h = vToday();
+  else if (route.tab==="plan") h = vPlan();
+  else if (route.tab==="talks") h = vTalks();
+  else if (route.tab==="prog") h = vProg();
+  else if (route.tab==="set") h = vSet();
+  else if (route.tab==="talk") h = vTalk(+route.sub);
+  else if (route.tab==="card") h = vCard(+route.sub);
+  document.getElementById("main").innerHTML = h;
+  var tb = "";
+  TABS.forEach(function(t){ tb += '<button class="'+(route.tab===t[0]||(t[0]==="talks"&&route.tab==="talk")||(t[0]==="today"&&route.tab==="card")?"on":"")+'" onclick="go(\''+t[0]+'\')"><i>'+t[2]+'</i>'+t[1]+'</button>'; });
+  document.getElementById("tabbar").innerHTML = tb;
+  window.scrollTo(0,0);
+}
+
+window.addEventListener("hashchange", function(){ parseHash(); render(); });
+document.addEventListener("visibilitychange", function(){ if (document.visibilityState!=="visible" && timer.on) { /* 前台计时自动暂停累计 */ } });
+parseHash(); render();
+if (!location.hash) location.replace("#today");
+</script>
+</body>
+</html>
