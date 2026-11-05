@@ -66,7 +66,53 @@ textarea{min-height:70px;resize:vertical}
 <script>
 "use strict";
 var BOOK = { id: "b2", name: "TED精读计划 2", total: 18 };
-var DEFTALKS = [{"t": "Are you a giver or a taker?", "s": "Adam Grant", "cn": "你是给予者还是索取者", "tag": "管理", "lvl": "中"}, {"t": "How to turn a group of strangers into a team", "s": "Amy Edmondson", "cn": "如何把陌生人变成团队", "tag": "管理", "lvl": "中"}, {"t": "Why good leaders make you feel safe", "s": "Simon Sinek", "cn": "好领导为什么让你有安全感", "tag": "管理", "lvl": "中"}, {"t": "The psychology of your future self", "s": "Dan Gilbert", "cn": "未来自我的心理学", "tag": "心理", "lvl": "中"}, {"t": "What makes a good life?", "s": "Robert Waldinger", "cn": "什么造就美好人生（哈佛成人研究）", "tag": "心理", "lvl": "中"}, {"t": "Why we all need to practice emotional first aid", "s": "Guy Winch", "cn": "情绪急救", "tag": "心理", "lvl": "中"}, {"t": "Everything you think you know about addiction is wrong", "s": "Johann Hari", "cn": "关于成瘾你知道的都错了", "tag": "社会", "lvl": "中"}, {"t": "Machine intelligence makes human morals more important", "s": "Zeynep Tufekci", "cn": "机器智能让人性道德更重要", "tag": "科技", "lvl": "中"}, {"t": "3 principles for creating safer AI", "s": "Stuart Russell", "cn": "更安全AI的三条原则", "tag": "科技", "lvl": "难"}, {"t": "How to get empowered, not overpowered, by AI", "s": "Max Tegmark", "cn": "如何让AI赋能而非压制", "tag": "科技", "lvl": "难"}, {"t": "How I'm fighting bias in algorithms", "s": "Joy Buolamwini", "cn": "算法偏见之战", "tag": "科技", "lvl": "难"}, {"t": "The era of blind faith in big data must end", "s": "Cathy O'Neil", "cn": "大数据盲信时代该结束了", "tag": "科技", "lvl": "难"}, {"t": "Why specializing early doesn't predict success", "s": "David Epstein", "cn": "早专精并不预示成功", "tag": "教育", "lvl": "中"}, {"t": "The gift and power of emotional courage", "s": "Susan David", "cn": "情绪勇气的力量", "tag": "心理", "lvl": "中"}, {"t": "Listening to shame", "s": "Brené Brown", "cn": "倾听羞耻", "tag": "心理", "lvl": "难"}, {"t": "The optimism bias", "s": "Tali Sharot", "cn": "乐观偏见", "tag": "心理", "lvl": "中"}, {"t": "There's more to life than being happy", "s": "Emily Esfahani Smith", "cn": "人生不止于幸福", "tag": "心理", "lvl": "中"}, {"t": "The next outbreak? We're not ready", "s": "Bill Gates", "cn": "下一次疫情我们没准备好", "tag": "社会", "lvl": "难"}];
+var DEFTALKS = [{"t": "Are you a giver or a taker?", "s": "", "cn": "你是给予者还是索取者", "tag": "管理", "lvl": "中", "dur": "13′18″", "w": 2522, "url": "https://www.ted.com/talks/adam_grant_are_you_a_giver_or_a_taker"}, {"t": "How to turn a group of strangers into a team", "s": "", "cn": "如何把陌生人变成团队", "tag": "管理", "lvl": "中", "dur": "12′57″", "w": 1904, "url": "https://www.ted.com/talks/amy_edmondson_how_to_turn_a_group_of_strangers_into_a_team"}, {"t": "Why good leaders make you feel safe", "s": "Simon Sinek", "cn": "好领导为什么让你有安全感", "tag": "管理", "lvl": "中", "dur": "11′45″", "w": 1971, "url": "https://www.ted.com/talks/simon_sinek_why_good_leaders_make_you_feel_safe"}, {"t": "The psychology of your future self", "s": "", "cn": "未来自我的心理学", "tag": "心理", "lvl": "中", "dur": "6′35″", "w": 1140, "url": "https://www.ted.com/talks/dan_gilbert_the_psychology_of_your_future_self"}, {"t": "What makes a good life? Lessons from the longest study on happiness", "s": "", "cn": "什么造就美好人生（哈佛成人研究）", "tag": "心理", "lvl": "中", "dur": "12′37″", "w": 1714, "url": "https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness"}, {"t": "Why we all need to practice emotional first aid", "s": "Guy Winch", "cn": "情绪急救", "tag": "心理", "lvl": "中", "dur": "17′14″", "w": 2562, "url": "https://www.ted.com/talks/guy_winch_why_we_all_need_to_practice_emotional_first_aid"}, {"t": "Everything you think you know about addiction is wrong", "s": "Johann Hari", "cn": "关于成瘾你知道的都错了", "tag": "社会", "lvl": "中", "dur": "14′32″", "w": 3018, "url": "https://www.ted.com/talks/johann_hari_everything_you_think_you_know_about_addiction_is_wrong"}, {"t": "Machine intelligence makes human morals more important", "s": "Zeynep Tufekci", "cn": "机器智能让人性道德更重要", "tag": "科技", "lvl": "中", "dur": "17′32″", "w": 2440, "url": "https://www.ted.com/talks/zeynep_tufekci_machine_intelligence_makes_human_morals_more_important"}, {"t": "3 principles for creating safer AI", "s": "", "cn": "更安全AI的三条原则", "tag": "科技", "lvl": "难", "dur": "17′25″", "w": 2759, "url": "https://www.ted.com/talks/stuart_russell_3_principles_for_creating_safer_ai"}, {"t": "How to get empowered, not overpowered, by AI", "s": "Max Tegmark", "cn": "如何让AI赋能而非压制", "tag": "科技", "lvl": "难", "dur": "17′05″", "w": 2704, "url": "https://www.ted.com/talks/max_tegmark_how_to_get_empowered_not_overpowered_by_ai"}, {"t": "How I'm fighting bias in algorithms", "s": "Joy Buolamwini", "cn": "算法偏见之战", "tag": "科技", "lvl": "难", "dur": "8′34″", "w": 1174, "url": "https://www.ted.com/talks/joy_buolamwini_how_i_m_fighting_bias_in_algorithms"}, {"t": "The era of blind faith in big data must end", "s": "Cathy O'Neil", "cn": "大数据盲信时代该结束了", "tag": "科技", "lvl": "难", "dur": "13′09″", "w": 1891, "url": "https://www.ted.com/talks/cathy_o_neil_the_era_of_blind_faith_in_big_data_must_end"}, {"t": "Why specializing early doesn't always mean career success", "s": "David Epstein", "cn": "早专精并不预示成功", "tag": "教育", "lvl": "中", "dur": "13′51″", "w": 2646, "url": "https://www.ted.com/talks/david_epstein_why_specializing_early_doesn_t_always_mean_career_success"}, {"t": "The gift and power of emotional courage", "s": "Susan David", "cn": "情绪勇气的力量", "tag": "心理", "lvl": "中", "dur": "16′38″", "w": 2099, "url": "https://www.ted.com/talks/susan_david_the_gift_and_power_of_emotional_courage"}, {"t": "Listening to shame", "s": "Brené Brown", "cn": "倾听羞耻", "tag": "心理", "lvl": "难", "dur": "20′21″", "w": 2856, "url": "https://www.ted.com/talks/brene_brown_listening_to_shame"}, {"t": "The optimism bias", "s": "Tali Sharot", "cn": "乐观偏见", "tag": "心理", "lvl": "中", "dur": "17′23″", "w": 2689, "url": "https://www.ted.com/talks/tali_sharot_the_optimism_bias"}, {"t": "There's more to life than being happy", "s": "Emily Esfahani Smith", "cn": "人生不止于幸福", "tag": "心理", "lvl": "中", "dur": "12′08″", "w": 1748, "url": "https://www.ted.com/talks/emily_esfahani_smith_there_s_more_to_life_than_being_happy"}, {"t": "The next outbreak? We're not ready", "s": "Bill Gates", "cn": "下一次疫情我们没准备好", "tag": "社会", "lvl": "难", "dur": "8′23″", "w": 1224, "url": "https://www.ted.com/talks/bill_gates_the_next_outbreak_we_re_not_ready"}];
+var TXDATA = null, TXERR = "";
+function loadTX(cb){
+  if (TXDATA) { cb && cb(); return; }
+  var url = "talks_" + BOOK.id.slice(1) + ".json";
+  fetch(url, {cache: "no-cache"}).then(function(r){ if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(j){ TXDATA = j; try { localStorage.setItem("tedtx_" + BOOK.id, JSON.stringify(j)); } catch(e){} cb && cb(); })
+    .catch(function(e){
+      try { var c = localStorage.getItem("tedtx_" + BOOK.id); if (c) { TXDATA = JSON.parse(c); cb && cb(); return; } } catch(e2){}
+      TXERR = e.message || "载入失败"; render();
+    });
+}
+function splitParas(txt){
+  var sents = String(txt).replace(/\s+/g, " ").match(/[^.!?]+[.!?]+["')\]]?|[^.!?]+$/g) || [txt];
+  var out = [], buf = "";
+  for (var i=0;i<sents.length;i++){
+    buf += (buf ? " " : "") + sents[i].trim();
+    if (buf.length > 210 || i === sents.length - 1) { out.push(buf.trim()); buf = ""; }
+  }
+  return out;
+}
+function vText(t){
+  var h = '<div class="card"><h3>第 '+t+' 篇 · 原文 <span id="txMeta"></span></h3>';
+  if (TXERR) h += '<div class="muted">原文载入失败：'+esc(TXERR)+'（把 talks_'+BOOK.id.slice(1)+'.json 放到同目录即可离线可用）</div>';
+  if (!TXDATA) { h += '<div class="muted">正在载入演讲稿全文…</div></div>'; return h; }
+  var d = TXDATA[String(t)];
+  if (!d) { return '<div class="card"><h3>第 '+t+' 篇 · 原文</h3><div class="muted">这一篇没有抓到官方稿。</div></div>'; }
+  var paras = splitParas(d.text);
+  var fs = (S.cfg.fontpx || 16);
+  h += '<div class="muted" style="margin-bottom:8px">'+esc(d.title)+' · '+esc(d.speaker)+' · '+esc(d.dur)+' · '+d.text.split(/\s+/).length+' 词 · 按 120 词/分钟约 '+Math.round(d.text.split(/\s+/).length/120)+' 分钟读完</div>';
+  h += '<div class="row" style="margin-bottom:10px"><button class="btn" onclick="fz(1)">A+</button><button class="btn" onclick="fz(-1)">A−</button><a class="btn" href="#" data-ext="'+esc(d.url)+'">TED 原页</a><button class="btn" onclick="copyTX('+t+')">复制全文</button><a class="btn" href="#talk/'+t+'">返回五步</a></div>';
+  h += '<div id="txy" style="font-size:'+fs+'px;line-height:1.85;color:#dfe7f1">';
+  for (var i=0;i<paras.length;i++){
+    h += '<p style="margin:0 0 14px" onclick="markP(this)">'+esc(paras[i])+'</p>';
+  }
+  h += '</div></div><div style="height:20px"></div>';
+  return h;
+}
+function fz(d){ S.cfg.fontpx = Math.min(24, Math.max(13, (S.cfg.fontpx || 16) + d)); save(); render(); }
+function markP(el){ var on = el.style.background === 'rgb(40, 60, 40)'; el.style.background = on ? '' : '#283c28'; }
+function copyTX(t){
+  var d = TXDATA && TXDATA[String(t)]; if (!d) return;
+  var ta = document.createElement('textarea'); ta.value = d.title + "\n" + d.speaker + "\n" + d.text;
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); alert('全文已复制'); } catch(e){ alert('复制失败，请长按选择'); }
+  document.body.removeChild(ta);
+}
 var LSK = "tedplan_" + BOOK.id;
 var DW = [1,2,3,4,5,6,8,9,10,11];   // 精读周
 var SW = [3,4,5,6,8,9,10,11];        // 跟读周
@@ -217,7 +263,7 @@ function go(h){ location.hash = h; }
 function parseHash(){
   var h = (location.hash || "#today").replace("#","");
   var p = h.split("/");
-  var okTab = TABS.some(function(t){ return t[0]===p[0]; }) || p[0]==="talk" || p[0]==="card";   route.tab = okTab ? p[0] : "today";
+  var okTab = TABS.some(function(t){ return t[0]===p[0]; }) || p[0]==="talk" || p[0]==="card" || p[0]==="text";   route.tab = okTab ? p[0] : "today";
   route.sub = p[1] ? p.slice(1).join("/") : null;
 }
 
@@ -286,7 +332,7 @@ function vTalks(){
   for (var t=1; t<=BOOK.total; t++){
     var r = roleOf(t), dn = stepsDone(t), c = cardOf(t);
     var d = defTalk(t);
-    h += '<div class="talk"><div class="no">P'+t+'</div><div class="ti" onclick="go(\'talk/'+t+'\')"><div class="nm">'+talkTitle(t)+'</div><div class="tg"><span class="tag '+r+'">'+roleCN(r)+'</span> 第 '+weekOf(t)+' 周 · '+dn+'/5 步'+(c?" · 已出卡":"")+'</div>'+(d.s?'<div class="tg">'+esc(d.s)+' · '+esc(d.cn)+' · '+esc(d.tag)+' · 难度'+esc(d.lvl)+'</div>':'')+'</div><button class="btn" style="padding:7px 10px;font-size:12px" onclick="renameTalk('+t+')">改名</button></div>';
+    h += '<div class="talk"><div class="no">P'+t+'</div><div class="ti" onclick="go(\'talk/'+t+'\')"><div class="nm">'+talkTitle(t)+'</div><div class="tg"><span class="tag '+r+'">'+roleCN(r)+'</span> 第 '+weekOf(t)+' 周 · '+dn+'/5 步'+(c?" · 已出卡":"")+'</div>'+(d.s?'<div class="tg">'+esc(d.s)+' · '+esc(d.cn)+' · '+esc(d.tag)+' · 难度'+esc(d.lvl)+(d.dur?' · '+esc(d.dur):'')+(d.w?' · '+d.w+'词':'')+'</div>':'')+'</div><button class="btn" style="padding:7px 10px;font-size:12px" onclick="renameTalk('+t+')">改名</button></div>';
   }
   return h;
 }
@@ -316,7 +362,7 @@ function vTalk(t){
     h += '<div class="muted" style="margin-top:8px">'+c.date+' 记录。可再次填写覆盖。</div>';
   } else h += '<div class="muted">还没有卡。精读日出卡是打卡的硬条件之一。</div>';
   h += '<div style="margin-top:10px"><a class="btn" href="#card/'+t+'">填/改卡</a></div></div>';
-  h += '<div style="margin-bottom:20px"><a class="btn" href="#talks">返回篇目</a></div>';
+  h += '<div class="row" style="margin-bottom:20px"><a class="btn p" href="#text/'+t+'">读原文（官方全文）</a><a class="btn" href="#talks">返回篇目</a></div>';
   return h;
 }
 
@@ -431,6 +477,7 @@ function render(){
   else if (route.tab==="set") h = vSet();
   else if (route.tab==="talk") h = vTalk(+route.sub);
   else if (route.tab==="card") h = vCard(+route.sub);
+  else if (route.tab==="text") h = vText(+route.sub);
   document.getElementById("main").innerHTML = h;
   var tb = "";
   TABS.forEach(function(t){ tb += '<button class="'+(route.tab===t[0]||(t[0]==="talks"&&route.tab==="talk")||(t[0]==="today"&&route.tab==="card")?"on":"")+'" onclick="go(\''+t[0]+'\')"><i>'+t[2]+'</i>'+t[1]+'</button>'; });
@@ -440,7 +487,7 @@ function render(){
 
 window.addEventListener("hashchange", function(){ parseHash(); render(); });
 document.addEventListener("visibilitychange", function(){ if (document.visibilityState!=="visible" && timer.on) { /* 前台计时自动暂停累计 */ } });
-parseHash(); render();
+parseHash(); render(); loadTX(function(){ if (route.tab==="text") render(); });
 if (!location.hash) location.replace("#today");
 </script>
 </body>
